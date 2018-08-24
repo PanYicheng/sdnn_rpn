@@ -60,21 +60,30 @@ def main():
                       {'Type': 'pool', 'num_filters': 4, 'filter_size': 7, 'th': 0., 'stride': 6},
                       {'Type': 'conv', 'num_filters': 20, 'filter_size': 17, 'th': 60.},
                       {'Type': 'pool', 'num_filters': 20, 'filter_size': 5, 'th': 0., 'stride': 5},
-                      {'Type': 'conv', 'num_filters': 20, 'filter_size': 5, 'th': 2.}]
+                      {'Type': 'conv', 'num_filters': 20, 'filter_size': 5, 'th': 2.},
+                      {'Type': 'pool', 'num_filters': 20, 'filter_size': 5, 'th': 0., 'stride': 5},
+                      {'Type': 'conv', 'num_filters': 40, 'filter_size': 5, 'th': 2.},
+                      {'Type': 'pool', 'num_filters': 40, 'filter_size': 5, 'th': 0., 'stride': 5},
+                      {'Type': 'conv', 'num_filters': 80, 'filter_size': 5, 'th': 2.}]
 
     weight_params = {'mean': 0.8, 'std': 0.01}
 
-    max_learn_iter = [0, 3000, 0, 5000, 0, 6000, 0]
+    max_learn_iter = [0, 6000, 0, 8000, 0, 10000, 0, 12000, 0, 14000]
     stdp_params = {'max_learn_iter': max_learn_iter,
-                   'stdp_per_layer': [0, 10, 0, 4, 0, 2],
+                   'stdp_per_layer': [0, 10, 0, 8, 0, 5, 0, 5, 0, 5],
                    'max_iter': sum(max_learn_iter),
-                   'a_minus': np.array([0, .003, 0, .0003, 0, .0003], dtype=np.float32),
-                   'a_plus': np.array([0, .004, 0, .0004, 0, .0004], dtype=np.float32),
+                   'a_minus': np.array([0, .003, 0, .0003, 0, .0003, 0, .0003, 0, .0003], dtype=np.float32),
+                   'a_plus': np.array([0, .004, 0, .0004, 0, .0004, 0, .0004, 0, .0004], dtype=np.float32),
                    'offset_STDP': [0, floor(network_params[1]['filter_size']),
                                    0,
                                    floor(network_params[3]['filter_size']/8),
                                    0,
-                                   floor(network_params[5]['filter_size'])]}
+                                   floor(network_params[5]['filter_size']),
+                                   0,
+                                   floor(network_params[7]['filter_size']),
+                                   0,
+                                   floor(network_params[9]['filter_size']),
+                                   ]}
 
     # Create network
     first_net = SDNN(network_params, weight_params, stdp_params, total_time,
