@@ -609,7 +609,7 @@ class SDNN:
         # Transform features to numpy array
         n_features = self.features_train[0].shape[0]
         n_train_samples = len(self.features_train)
-        X_train = np.concatenate(self.features_train).reshape((n_train_samples, n_features))
+        X_train = np.concatenate(self.features_train)
         print("------------ Train features Extraction Progress  {}%----------------".format(str(self.num_img_train)
                                                                                             + '/'
                                                                                             + str(self.num_img_train)
@@ -666,7 +666,7 @@ class SDNN:
         # Transform features to numpy array
         n_features = self.features_test[0].shape[0]
         n_train_samples = len(self.features_test)
-        X_test = np.concatenate(self.features_test).reshape((n_train_samples, n_features))
+        X_test = np.concatenate(self.features_test)
         print("------------ Test features Extraction Progress  {}%----------------".format(str(self.num_img_test)
                                                                                            + '/'
                                                                                            + str(self.num_img_test)
