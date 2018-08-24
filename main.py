@@ -62,7 +62,8 @@ def main():
                       {'Type': 'pool', 'num_filters': 20, 'filter_size': 5, 'th': 0., 'stride': 5},
                       {'Type': 'conv', 'num_filters': 20, 'filter_size': 5, 'th': 2.},
                       {'Type': 'pool', 'num_filters': 20, 'filter_size': 5, 'th': 0., 'stride': 5},
-                      {'Type': 'conv', 'num_filters': 40, 'filter_size': 5, 'th': 2.},
+                      {'Type': 'conv', 'num_filters'
+                      : 40, 'filter_size': 5, 'th': 2.},
                       {'Type': 'pool', 'num_filters': 40, 'filter_size': 5, 'th': 0., 'stride': 5},
                       {'Type': 'conv', 'num_filters': 80, 'filter_size': 5, 'th': 2.}]
 
@@ -115,17 +116,17 @@ def main():
         np.save(path_features + 'y_test', y_test)
 
     # ------------------------------- Classify -------------------------------#
-    classifier_params = {'C': 1.0, 'gamma': 'auto'}
-    train_mean = np.mean(X_train, axis=0)
-    train_std = np.std(X_train, axis=0)
-    X_train -= train_mean
-    X_test -= train_mean
-    X_train /= (train_std + 1e-5)
-    X_test /= (train_std + 1e-5)
-    svm = Classifier(X_train, y_train, X_test, y_test, classifier_params, classifier_type='SVM')
-    train_score, test_score = svm.run_classiffier()
-    print('Train Score: ' + str(train_score))
-    print('Test Score: ' + str(test_score))
+    # classifier_params = {'C': 1.0, 'gamma': 'auto'}
+    # train_mean = np.mean(X_train, axis=0)
+    # train_std = np.std(X_train, axis=0)
+    # X_train -= train_mean
+    # X_test -= train_mean
+    # X_train /= (train_std + 1e-5)
+    # X_test /= (train_std + 1e-5)
+    # svm = Classifier(X_train, y_train, X_test, y_test, classifier_params, classifier_type='SVM')
+    # train_score, test_score = svm.run_classiffier()
+    # print('Train Score: ' + str(train_score))
+    # print('Test Score: ' + str(test_score))
 
     print('DONE')
 
