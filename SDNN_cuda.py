@@ -598,8 +598,8 @@ class SDNN:
             V = self.layers[self.num_layers-1]['V']
             # here the features is of size (D,1)
             # in order to use RPN we change this to size (H, W, D)
-            # features = np.max(np.max(np.max(V, axis=0), axis=0), axis=1)
-            features = np.max(V, axis=3)
+            features = np.max(np.max(np.max(V, axis=0), axis=0), axis=1)
+            # features = np.max(V, axis=3)
             self.features_train.append(features)
 
 
@@ -659,8 +659,8 @@ class SDNN:
             V = self.layers[self.num_layers-1]['V']
             # here the features is of size (D,1)
             # in order to use RPN we change this to size (H, W, D)
-            # features = np.max(np.max(np.max(V, axis=0), axis=0), axis=1)
-            features = np.max(V, axis=3)
+            features = np.max(np.max(np.max(V, axis=0), axis=0), axis=1)
+            # features = np.max(V, axis=3)
             self.features_test.append(features)
 
         # Transform features to numpy array
