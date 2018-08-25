@@ -40,9 +40,9 @@ def main():
 
     imagenet_path = '/home/allwin/panyicheng/imagenet'
     sysnets = ['n01055165', 'n01581434', 'n01629819', 'n01665541', 'n01667114']
-    spike_times_learn = [os.path.join(imagenet_path, sysnet) for sysnet in sysnets]
-    spike_times_train = [os.path.join(imagenet_path, sysnet) for sysnet in sysnets]
-    spike_times_test = [os.path.join(imagenet_path, sysnet) for sysnet in sysnets]
+    spike_times_learn = [os.path.join(imagenet_path, sysnet, 'learn') for sysnet in sysnets]
+    spike_times_train = [os.path.join(imagenet_path, sysnet, 'train') for sysnet in sysnets]
+    spike_times_test = [os.path.join(imagenet_path, sysnet, 'test') for sysnet in sysnets]
 
 
     # Results directories
