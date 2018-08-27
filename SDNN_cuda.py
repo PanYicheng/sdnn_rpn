@@ -575,6 +575,7 @@ class SDNN:
         print("-----------------------------------------------------------")
         print("----------- EXTRACTING TRAINING FEATURES ------------------")
         print("-----------------------------------------------------------")
+        train_feature_names_file = open('train_names.txt', 'wt')
         for i in range(self.num_img_train):
             print("------------ Train features Extraction Progress  {}%----------------".format(str(i) + '/'
                                                                                                 + str(self.num_img_train)
@@ -587,6 +588,7 @@ class SDNN:
             self.reset_layers()  # Reset all layers for the new image
             if self.DoG:
                 path_img = next(self.spike_times_train)
+                train_feature_names_file.writelines([path_img])
                 st = DoG_filter(path_img, self.filt, self.img_size, self.total_time, self.num_layers)
                 st = np.expand_dims(st, axis=2)
             else:
@@ -619,6 +621,7 @@ class SDNN:
         print("-----------------------------------------------------------")
         print("------------- TRAINING FEATURES EXTRACTED -----------------")
         print("-----------------------------------------------------------")
+        train_feature_names_file.close()
 
         # Clear Features
         self.features_train = []
@@ -638,6 +641,7 @@ class SDNN:
         print("-----------------------------------------------------------")
         print("---------------- EXTRACTING TEST FEATURES -----------------")
         print("-----------------------------------------------------------")
+        test_names_file = open('test_names.txt', 'wt')
         for i in range(self.num_img_test):
             print("------------ Test features Extraction Progress  {}%----------------".format(str(i) + '/'
                                                                                                + str(self.num_img_test)
@@ -648,6 +652,7 @@ class SDNN:
             self.reset_layers()  # Reset all layers for the new image
             if self.DoG:
                 path_img = next(self.spike_times_test)
+                test_names_file.write([path_img])
                 st = DoG_filter(path_img, self.filt, self.img_size, self.total_time, self.num_layers)
                 st = np.expand_dims(st, axis=2)
             else:
@@ -676,6 +681,7 @@ class SDNN:
         print("-----------------------------------------------------------")
         print("---------------- TEST FEATURES EXTRACTED ------------------")
         print("-----------------------------------------------------------")
+        test_names_file.close()
 
         # Clear Features
         self.features_test = []
