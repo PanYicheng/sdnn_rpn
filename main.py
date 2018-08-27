@@ -23,7 +23,7 @@ def main():
     learn_SDNN = True  # This flag toggles between Learning STDP and classify features
                         # or just classify by loading pretrained weights for the face/motor dataset
     if learn_SDNN:
-        set_weights = False  # Loads the weights from a path (path_set_weigths) and prevents any SDNN learning
+        set_weights = True  # Loads the weights from a path (path_set_weigths) and prevents any SDNN learning
         save_weights = True  # Saves the weights in a path (path_save_weigths)
         save_features = True  # Saves the features and labels in the specified path (path_features)
     else:
@@ -42,7 +42,7 @@ def main():
     sysnets = ['n01055165', 'n01581434', 'n01629819', 'n01665541', 'n01667114']
     spike_times_learn = [os.path.join(imagenet_path, sysnet, 'train') for sysnet in sysnets]
     spike_times_train = [os.path.join(imagenet_path, sysnet, 'train') for sysnet in sysnets]
-    spike_times_test = [os.path.join(imagenet_path, sysnet, 'train') for sysnet in sysnets]
+    spike_times_test = [os.path.join(imagenet_path, sysnet, 'test') for sysnet in sysnets]
 
 
     # Results directories
@@ -76,7 +76,7 @@ def main():
 
     weight_params = {'mean': 0.8, 'std': 0.01}
 
-    max_learn_iter = [0, 3000, 0, 5000, 0, 6000, 0]
+    max_learn_iter = [0, 3000, 0, 6000, 0, 8000, 0]
     stdp_params = {'max_learn_iter': max_learn_iter,
                    'stdp_per_layer': [0, 10, 0, 4, 0, 2],
                    'max_iter': sum(max_learn_iter),
@@ -98,6 +98,7 @@ def main():
     if set_weights:
         weight_path_list = [path_set_weigths + 'weight_' + str(i) + '.npy' for i in range(len(network_params) - 1)]
         first_net.set_weights(weight_path_list)
+        first_net.train_SDNN()
     else:
         first_net.train_SDNN()
 
