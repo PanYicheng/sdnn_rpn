@@ -570,8 +570,8 @@ class SDNN:
                             where N is the number of training samples
                             and M is the number of maps in the last layer
         """
-        self.network_struc[3]['th'] = 50.
-        self.network_struc[5]['th'] = 100000  # Set threshold of last layer to inf
+        self.network_struc[-2]['th'] = 50.
+        self.network_struc[-1]['th'] = 100000  # Set threshold of last layer to inf
         print("-----------------------------------------------------------")
         print("----------- EXTRACTING TRAINING FEATURES ------------------")
         print("-----------------------------------------------------------")
@@ -636,8 +636,8 @@ class SDNN:
                             where N is the number of training samples
                             and M is the number of maps in the last layer
         """
-        self.network_struc[3]['th'] = 50.
-        self.network_struc[5]['th'] = 100000  # Set threshold of last layer to inf
+        self.network_struc[-2]['th'] = 50.
+        self.network_struc[-1]['th'] = 100000  # Set threshold of last layer to inf
         print("-----------------------------------------------------------")
         print("---------------- EXTRACTING TEST FEATURES -----------------")
         print("-----------------------------------------------------------")
