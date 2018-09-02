@@ -242,6 +242,19 @@ class SDNN:
                 continue
             self.weights.append(weights_tmp.astype(np.float32))
 
+    def calc_convergence(self):
+        '''
+        calculate the weights convergence value for each layer
+        '''
+        convergence = []
+        for i in range(len(self.weights)):
+             w = self.weights[i]
+             convergence.append(np.sum(w * (1 - w)) / w.size)
+        return convergence
+              
+
+
+
     # Dimension Checker
     def check_dimensions(self):
         """
@@ -411,7 +424,8 @@ class SDNN:
             
             We iterate over the set of images a maximum of self.max_iter times
         """
-
+        print('Network final shape', self.network_struc[-1]['shape'])
+        convergence_over_training = []
         print("-----------------------------------------------------------")
         print("-------------------- STARTING LEARNING---------------------")
         print("-----------------------------------------------------------")
@@ -440,6 +454,7 @@ class SDNN:
                 st = self.spike_times_learn[self.curr_img, :, :, :, :]  # (Image_number, H, W, M, time) to (H, W, M, time)
             self.layers[0]['S'] = st  # (H, W, M, time)
             self.train_step()
+            convergence_over_training.append(self.calc_convergence())
 
             if i % 500 == 0:
                 self.stdp_a_plus[self.learning_layer] = min(2.*self.stdp_a_plus[self.learning_layer], 0.15)
@@ -457,6 +472,7 @@ class SDNN:
         print("-----------------------------------------------------------")
         print("------------------- LEARNING COMPLETED --------------------")
         print("-----------------------------------------------------------")
+        np.save('weights_converg.npy', convergence_over_training)
 
     # Find STDP update indices and potentials
     def get_STDP_idxs(self, valid, H, W, D, layer_idx):
@@ -570,8 +586,8 @@ class SDNN:
                             where N is the number of training samples
                             and M is the number of maps in the last layer
         """
-        self.network_struc[3]['th'] = 50.
-        self.network_struc[5]['th'] = 100000  # Set threshold of last layer to inf
+        self.network_struc[-2]['th'] = 50.
+        self.network_struc[-1]['th'] = 100000  # Set threshold of last layer to inf
         print("-----------------------------------------------------------")
         print("----------- EXTRACTING TRAINING FEATURES ------------------")
         print("-----------------------------------------------------------")
@@ -633,8 +649,8 @@ class SDNN:
                             where N is the number of training samples
                             and M is the number of maps in the last layer
         """
-        self.network_struc[3]['th'] = 50.
-        self.network_struc[5]['th'] = 100000  # Set threshold of last layer to inf
+        self.network_struc[-2]['th'] = 50.
+        self.network_struc[-1]['th'] = 100000  # Set threshold of last layer to inf
         print("-----------------------------------------------------------")
         print("---------------- EXTRACTING TEST FEATURES -----------------")
         print("-----------------------------------------------------------")
