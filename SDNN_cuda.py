@@ -586,7 +586,7 @@ class SDNN:
                             where N is the number of training samples
                             and M is the number of maps in the last layer
         """
-        self.network_struc[-2]['th'] = 50.
+#        self.network_struc[-2]['th'] = 50.
         self.network_struc[-1]['th'] = 100000  # Set threshold of last layer to inf
         print("-----------------------------------------------------------")
         print("----------- EXTRACTING TRAINING FEATURES ------------------")
@@ -652,7 +652,7 @@ class SDNN:
                             where N is the number of training samples
                             and M is the number of maps in the last layer
         """
-        self.network_struc[-2]['th'] = 50.
+#        self.network_struc[-2]['th'] = 50.
         self.network_struc[-1]['th'] = 100000  # Set threshold of last layer to inf
         print("-----------------------------------------------------------")
         print("---------------- EXTRACTING TEST FEATURES -----------------")
@@ -668,7 +668,7 @@ class SDNN:
             self.reset_layers()  # Reset all layers for the new image
             if self.DoG:
                 path_img = next(self.spike_times_test)
-                test_names_file.write([path_img])
+                test_names_file.writelines([path_img])
                 st = DoG_filter(path_img, self.filt, self.img_size, self.total_time, self.num_layers)
                 st = np.expand_dims(st, axis=2)
             else:
