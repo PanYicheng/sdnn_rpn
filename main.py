@@ -12,19 +12,20 @@ import numpy as np
 from os.path import dirname, realpath
 from math import floor
 import os
+import sys
 import re
 
 import time
 
 
-def main():
+def main(learn_SDNN=True):
 
     # Flags
-    learn_SDNN = True  # This flag toggles between Learning STDP and classify features
+    # learn_SDNN = True  # This flag toggles between Learning STDP and classify features
                         # or just classify by loading pretrained weights for the face/motor dataset
     if learn_SDNN:
-        set_weights = True  # Loads the weights from a path (path_set_weigths) and prevents any SDNN learning
-        save_weights = False  # Saves the weights in a path (path_save_weigths)
+        set_weights = False  # Loads the weights from a path (path_set_weigths) and prevents any SDNN learning
+        save_weights = True  # Saves the weights in a path (path_save_weigths)
         save_features = True  # Saves the features and labels in the specified path (path_features)
     else:
         set_weights = True  # Loads the weights from a path (path_set_weigths) and prevents any SDNN learning
@@ -33,65 +34,44 @@ def main():
 
     # ------------------------------- Learn, Train and Test paths-------------------------------#
     # Image sets directories
-    path = dirname(dirname(realpath(__file__)))
-    # spike_times_learn = [path + '/datasets/LearningSet/Face/', path + '/datasets/LearningSet/Motor/']
-    # spike_times_train = [path + '/datasets/TrainingSet/Face/', path + '/datasets/TrainingSet/Motor/']
-    # spike_times_test = [path + '/datasets/TestingSet/Face/', path + '/datasets/TestingSet/Motor/']
-
-    imagenet_path = '/home/allwin/panyicheng/imagenet'
-    sysnets = ['n01055165', 'n01581434', 'n01629819', 'n01665541', 'n02691156']
-    spike_times_learn = [os.path.join(imagenet_path, 'train', sysnet) for sysnet in sysnets]
-    spike_times_train = [os.path.join(imagenet_path, 'train', sysnet) for sysnet in sysnets]
-    spike_times_test = [os.path.join(imagenet_path, 'train', sysnet) for sysnet in sysnets]
-
+    path = dirname(realpath(__file__))
+    spike_times_learn = [path + '/datasets/LearningSet/Face/', path + '/datasets/LearningSet/Motor/']
+    spike_times_train = [path + '/datasets/TrainingSet/Face/', path + '/datasets/TrainingSet/Motor/']
+    spike_times_test = [path + '/datasets/TestingSet/Face/', path + '/datasets/TestingSet/Motor/']
 
     # Results directories
-    path_set_weigths = 'results_final/'
-    path_save_weigths = 'results_final/'
-    path_features = 'results_final/'
+    result_path = 'results/'
+    path_set_weigths = result_path
+    path_save_weigths = result_path
+    path_features = result_path
 
     # ------------------------------- SDNN -------------------------------#
     # SDNN_cuda parameters
     DoG_params = {'img_size': (256, 160), 'DoG_size': 7, 'std1': 1., 'std2': 2.}  # img_size is (col size, row size)
     total_time = 15
-    # network_params = [{'Type': 'input', 'num_filters': 1, 'pad': (0, 0), 'H_layer': DoG_params['img_size'][1],
-    #                    'W_layer': DoG_params['img_size'][0]},
-    #                   {'Type': 'conv', 'num_filters': 4, 'filter_size': 5, 'th': 10.},
-    #                   {'Type': 'pool', 'num_filters': 4, 'filter_size': 7, 'th': 0., 'stride': 6},
-    #                   {'Type': 'conv', 'num_filters': 20, 'filter_size': 17, 'th': 60.},
-    #                   {'Type': 'pool', 'num_filters': 20, 'filter_size': 5, 'th': 0., 'stride': 5},
-    #                   {'Type': 'conv', 'num_filters': 20, 'filter_size': 5, 'th': 2.},
-    #                   {'Type': 'pool', 'num_filters': 20, 'filter_size': 5, 'th': 0., 'stride': 5},
-    #                   {'Type': 'conv', 'num_filters'
-    #                   : 40, 'filter_size': 5, 'th': 2.},
-    #                   {'Type': 'pool', 'num_filters': 40, 'filter_size': 5, 'th': 0., 'stride': 5},
-    #                   {'Type': 'conv', 'num_filters': 80, 'filter_size': 5, 'th': 2.}]
-    network_params = [{'Type': 'input', 'num_filters': 1, 'pad': (3, 0), 'H_layer': DoG_params['img_size'][1],
+    network_params = [{'Type': 'input', 'num_filters': 1, 'pad': (0, 0), 'H_layer': DoG_params['img_size'][1],
                        'W_layer': DoG_params['img_size'][0]},
                       {'Type': 'conv', 'num_filters': 4, 'filter_size': 5, 'th': 10.},
-                      {'Type': 'pool', 'num_filters': 4, 'filter_size': 2, 'th': 0., 'stride': 2},
-                      {'Type': 'conv', 'num_filters': 16, 'filter_size': 5, 'th': 10.},
-                      {'Type': 'pool', 'num_filters': 16, 'filter_size': 2, 'th': 0., 'stride': 2},
-                      {'Type': 'conv', 'num_filters': 256, 'filter_size': 5, 'th': 40.},
-                      {'Type': 'pool', 'num_filters': 256, 'filter_size': 2, 'th': 0., 'stride': 2},
-                      {'Type': 'conv', 'num_filters': 512, 'filter_size': 5, 'th': 640.}]
+                      {'Type': 'pool', 'num_filters': 4, 'filter_size': 7, 'th': 0., 'stride': 6},
+                      {'Type': 'conv', 'num_filters': 20, 'filter_size': 17, 'th': 60.},
+                      {'Type': 'pool', 'num_filters': 20, 'filter_size': 5, 'th': 0., 'stride': 5},
+                      {'Type': 'conv', 'num_filters': 20, 'filter_size': 5, 'th': 2.}
+                      ]
 
     weight_params = {'mean': 0.8, 'std': 0.01}
-    max_learn_iter = [0, 3000, 0, 5000, 0, 5000, 0, 5000]
+    max_learn_iter = [0, 3000, 0, 5000, 0, 5000]
     stdp_params = {'max_learn_iter': max_learn_iter,
-                   'stdp_per_layer': [0, 10, 0, 9, 0, 8, 0, 7],
+                   'stdp_per_layer': [0, 10, 0, 5, 0, 1],
                    'max_iter': sum(max_learn_iter),
-                   'a_minus': np.array([0, .003, 0, .0003, 0, .0003, 0, 0.0003], dtype=np.float32),
-                   'a_plus': np.array([0, .004, 0, .0004, 0, .0004, 0, 0.0004], dtype=np.float32),
+                   'a_minus': np.array([0, .003, 0, .0003, 0, .0003], dtype=np.float32),
+                   'a_plus': np.array([0, .004, 0, .0004, 0, .0004], dtype=np.float32),
                    'offset_STDP': [0, 
                                    floor(network_params[1]['filter_size']),
                                    0,
                                    floor(network_params[3]['filter_size']/8),
                                    0,
-                                   floor(network_params[5]['filter_size']),
-                                   0,
-                                   floor(network_params[7]['filter_size'])
-                                   ]}
+                                   floor(network_params[5]['filter_size'])]
+                   }
 
     # Create network
     first_net = SDNN(network_params, weight_params, stdp_params, total_time,
@@ -141,6 +121,9 @@ def main():
 
 if __name__ == '__main__':
     start = time.time()
-    main()
+    learn_SDNN = False
+    if sys.argv[1] == 'train':
+        learn_SDNN = True
+    main(learn_SDNN)
     end = time.time()
     print('Time Userd', end-start)
