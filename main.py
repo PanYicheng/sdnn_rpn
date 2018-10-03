@@ -122,7 +122,7 @@ def main(learn_SDNN=True):
 if __name__ == '__main__':
     start = time.time()
     learn_SDNN = False
-    if sys.argv[1] == 'train':
+    if len(sys.argv) >= 2 and sys.argv[1] == 'train':
         learn_SDNN = True
     main(learn_SDNN)
     end = time.time()
