@@ -8,10 +8,10 @@ import os
 def load_features(dir_path):
     file_names = ['X_train.npy', 'y_train.npy', 'X_test.npy', 'y_test.npy']
     ret = [None, None, None, None]
-    for file_name in file_names:
+    for i, file_name in enumerate(file_names):
         path = os.path.join(dir_path, file_name)
         if os.path.exists(path):
-            ret[0] = np.load(path)
+            ret[i] = np.load(path)
     return ret
 
 
