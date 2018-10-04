@@ -19,7 +19,13 @@ import sys
 import time
 
 
-def main(model_name, learn_SDNN=False):
+def main(model_name, learn_SDNN=False, fine_tune=False):
+    """
+    :param model_name: model name to use
+    :param learn_SDNN: if use stdp to train
+    :param fine_tune:  if load pretrained weights
+    :return:
+    """
     if models[model_name] == None:
         print('No such model[%s] in model_def, exiting' % model_name)
         return
@@ -27,7 +33,11 @@ def main(model_name, learn_SDNN=False):
     # learn_SDNN = False  # This flag toggles between Learning STDP and classify features
                         # or just classify by loading pretrained weights for the face/motor dataset
     if learn_SDNN:
-        set_weights = True  # Loads the weights from a path (path_set_weigths) and prevents any SDNN learning
+        if fine_tune:
+            set_weights = True
+
+        else:
+            set_weights = False
         save_weights = True  # Saves the weights in a path (path_save_weigths)
         save_features = True  # Saves the features and labels in the specified path (path_features)
     else:
@@ -53,7 +63,7 @@ def main(model_name, learn_SDNN=False):
         network_layer_num = len(models[model_name]['network_params'])
         weight_path_list = [path_set_weigths + 'weight_' + str(i) + '.npy' for i in range(network_layer_num - 1)]
         first_net.set_weights(weight_path_list)
-    else:
+    if learn_SDNN:
         first_net.train_SDNN()
 
     # Save the weights
@@ -93,9 +103,14 @@ if __name__ == '__main__':
     start = time.time()
     model_name = 'default'
     isLearning = False
+    fine_tune = False
     if len(sys.argv) > 2:
         model_name = sys.argv[1]
-        isLearning = sys.argv[2] == 'train'
-    main(model_name, isLearning)
+        if sys.argv[2] == 'train':
+            isLearning = True
+        elif sys.argv[2] == 'finetune':
+            isLearning = True
+            fine_tune = True
+    main(model_name, isLearning, fine_tune)
     end = time.time()
     print('Time Userd', end-start)

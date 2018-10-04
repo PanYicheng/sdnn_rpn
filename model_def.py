@@ -27,7 +27,8 @@ network_params = [{'Type': 'input', 'num_filters': 1, 'pad': (0, 0), 'H_layer': 
                   {'Type': 'pool', 'num_filters': 20, 'filter_size': 5, 'th': 0., 'stride': 5},
                   {'Type': 'conv', 'num_filters': 20, 'filter_size': 5, 'th': 2.}]
 weight_params = {'mean': 0.8, 'std': 0.01}
-max_learn_iter = [0, 3000, 0, 5000, 0, 5000]
+# max_learn_iter = [0, 3000, 0, 5000, 0, 5000]
+max_learn_iter = [0, 0, 0, 0, 0, 5000]
 stdp_params = {'max_learn_iter': max_learn_iter,
                    'stdp_per_layer': [0, 10, 0, 5, 0, 1],
                    'max_iter': sum(max_learn_iter),
