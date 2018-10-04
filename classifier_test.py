@@ -20,5 +20,5 @@ if __name__ == "__main__":
     features = load_features('./results')
     svm = Classifier(features[0], features[1], features[2], features[3], {'C':1.0})
     svm.cross_val_svm({'C':np.arange(1,101).tolist()}, 3)
-    # print(svm.cvs_mean, svm.cvs_std)
+    print("Best Score: ", max(svm.cvs_mean), max(svm.cvs_std))
     plt.show(svm.plots[-1])
