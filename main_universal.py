@@ -19,12 +19,12 @@ import sys
 import time
 
 
-def main(model_name):
+def main(model_name, learn_SDNN=False):
     if models[model_name] == None:
         print('No such model[%s] in model_def, exiting' % model_name)
         return
     # Flags
-    learn_SDNN = False  # This flag toggles between Learning STDP and classify features
+    # learn_SDNN = False  # This flag toggles between Learning STDP and classify features
                         # or just classify by loading pretrained weights for the face/motor dataset
     if learn_SDNN:
         set_weights = True  # Loads the weights from a path (path_set_weigths) and prevents any SDNN learning
@@ -92,8 +92,10 @@ def main(model_name):
 if __name__ == '__main__':
     start = time.time()
     model_name = 'default'
-    if len(sys.argv) > 1:
+    isLearning = False
+    if len(sys.argv) > 2:
         model_name = sys.argv[1]
-    main(model_name)
+        isLearning = sys.argv[2] == 'train'
+    main(model_name, isLearning)
     end = time.time()
     print('Time Userd', end-start)
