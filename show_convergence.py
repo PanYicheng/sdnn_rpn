@@ -30,7 +30,7 @@ if __name__ == "__main__":
         x = np.arange(0, weights_converg.shape[0])
         for i in range(0, layer_num, 2):
             conv = weights_converg[:,i]
-            plt.plot(x, conv, colors=cmap(i), label="Conv Layer %d" % i)
+            plt.plot(x, conv, color=cmap(i), label="Layer %d" % i)
         plt.legend()
         plt.show()
     else:
