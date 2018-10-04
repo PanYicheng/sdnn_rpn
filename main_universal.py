@@ -60,14 +60,17 @@ def main(model_name, learn_SDNN=False, fine_tune=False):
 
     # Set the weights or learn STDP
     if set_weights:
+        print("Loading weights from %s " % path_set_weigths)
         network_layer_num = len(models[model_name]['network_params'])
         weight_path_list = [path_set_weigths + 'weight_' + str(i) + '.npy' for i in range(network_layer_num - 1)]
         first_net.set_weights(weight_path_list)
     if learn_SDNN:
+        print("Starting training SDNN ... ")
         first_net.train_SDNN()
 
     # Save the weights
     if save_weights:
+        print("Saving weights to %s" % path_save_weigths)
         weights = first_net.get_weights()
         for i in range(len(weights)):
             np.save(path_save_weigths + 'weight_'+str(i), weights[i])
@@ -78,6 +81,7 @@ def main(model_name, learn_SDNN=False, fine_tune=False):
 
     # Save X_train and X_test
     if save_features:
+        print("Saving Features to %s " % path_features)
         np.save(path_features + 'X_train', X_train)
         np.save(path_features + 'y_train', y_train)
         np.save(path_features + 'X_test', X_test)
@@ -113,4 +117,4 @@ if __name__ == '__main__':
             fine_tune = True
     main(model_name, isLearning, fine_tune)
     end = time.time()
-    print('Time Userd', end-start)
+    print('Time Used', end-start)
