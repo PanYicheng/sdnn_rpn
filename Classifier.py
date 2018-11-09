@@ -113,10 +113,9 @@ class Classifier:
             
             Returns a tuple containing two doubles for the train and test error respectively    
         """
-        if (self.classifier_type == 'SVM'):
-            self.train_classifier_svm()
-            self.test_classifier_svm()
-            return self.train_score[-1], self.test_score[-1]
+        self.train_classifier_svm()
+        self.test_classifier_svm()
+        return self.train_score[-1], self.test_score[-1]
 
     def cross_val_svm(self, cv_param, cv):
         """

@@ -591,6 +591,8 @@ class SDNN:
         print("-----------------------------------------------------------")
         print("----------- EXTRACTING TRAINING FEATURES ------------------")
         print("-----------------------------------------------------------")
+        if os.path.exists('train_names.txt'):
+            os.remove('train_names.txt')
         train_feature_names_file = open('train_names.txt', 'wt')
         for i in range(self.num_img_train):
             print("------------ Train features Extraction Progress  {}%----------------".format(str(i) + '/'

@@ -45,7 +45,7 @@ path = '.'
 spike_times_learn = [path + '/datasets/LearningSet/Face/', path + '/datasets/LearningSet/Motor/']
 spike_times_train = [path + '/datasets/TrainingSet/Face/', path + '/datasets/TrainingSet/Motor/']
 spike_times_test = [path + '/datasets/TestingSet/Face/', path + '/datasets/TestingSet/Motor/']
-output_path = 'results'
+output_path = 'results/'
 models.update({model_name:{'DoG_params':DoG_params,
                            'total_time':total_time,
                            'network_params':network_params,
